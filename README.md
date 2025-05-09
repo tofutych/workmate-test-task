@@ -20,17 +20,37 @@ cd workmate-test-task
 uv run main.py data1.csv data2.csv data3.csv --report payout
 ```
 
-### Запуск без использования uv
+<details>
+<summary>Запуск без использования uv</summary>
+
 ```bash
 git clone https://github.com/tofutych/workmate-test-task.git
 cd workmate-test-task
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate  # или .venv\Scripts\activate на Windows
 pip install -r requirements.txt
-python main.py res/data1.csv res/data2.csv res/data3.csv --report payout
+python3 main.py res/data1.csv res/data2.csv res/data3.csv --report payout
 ```
 
-## 📸 Скриншот
+</details>
+
+## ✅ Запуск тестов
+### Запуск тестов используя uv
+```bash
+uv run pytest
+```
+
+<details>
+<summary>Запуск тестов без использования uv</summary>
+
+```bash
+source .venv/bin/activate  # или .venv\Scripts\activate на Windows
+python3 -m pytest
+```
+
+</details>
+
+## 📸 Скриншоты
 
 ### Содержимое файла payout.json после выполнения программы
 ![payout.json](images/payout.json.png)
