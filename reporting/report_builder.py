@@ -72,7 +72,7 @@ class PayoutBuilder(ReportBuilder):
 
                 row = self._normalize_employee(row, self.TEMPLATE_KEYS)
                 grouped[department].employees.append(row)
-            return grouped
+            return dict(grouped)
         except ValueError as e:
             raise ValueError(f"Неправильный формат данных: {e}") from None
 
