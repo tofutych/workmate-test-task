@@ -2,8 +2,7 @@ import argparse
 from dataclasses import asdict
 from typing import TypedDict, cast
 
-from reporting import BuilderFactory, CsvReader, WriterFactory
-from reporting.report_builder import DepartmentReport
+from reporting import BuilderFactory, CsvReader, DepartmentReport, WriterFactory
 
 
 class CliArgs(TypedDict):
@@ -13,13 +12,13 @@ class CliArgs(TypedDict):
 
 def parse_args() -> CliArgs:
     parser = argparse.ArgumentParser(description="Скрипт для создания отчетов")
+
     file_group = parser.add_argument_group("Файлы")
     file_group.add_argument("files", nargs="+", help="Список из путей к файлам")  # pyright: ignore[reportUnusedCallResult]
+
     report_group = parser.add_argument_group("Тип отчета")
-    report_group.add_argument("--report", help="Вид отчета")  # pyright: ignore[reportUnusedCallResult]
+    report_group.add_argument("--report", type=str, required=True, help="Вид отчета")  # pyright: ignore[reportUnusedCallResult]
     args: argparse.Namespace = parser.parse_args()
-    if not args.report:
-        parser.error("Аргумент --report обязателен.")
     return cast(CliArgs, cast(object, vars(args)))
 
 
