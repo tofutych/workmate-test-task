@@ -24,3 +24,10 @@ python3 main.py data1.csv data2.csv data3.csv --report payout
 
 ### Содержимое файла payout.json после выполнения программы
 ![payout.json](images/payout.json.png)
+
+### Результаты тестов
+![tests.json](images/tests.png)
+
+## TODO
+
+- [ ] Упростить написание type hints
