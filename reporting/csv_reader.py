@@ -6,7 +6,7 @@ class CsvReader:
         self.filepath: str = filepath
         self.header: list[str] = []
         self.rows: list[dict[str, str]] = []
-        self._file: TextIO | None
+        self._file: TextIO | None = None
 
     def __enter__(self) -> "CsvReader":
         try:
