@@ -1,21 +1,18 @@
 import json
 from abc import ABC, abstractmethod
-from collections import defaultdict
 from typing import override
 
 
 class ReportWriter(ABC):
     @abstractmethod
-    def write(self, data: defaultdict[str, list[dict[str, str]]], output_file: str):
+    def write(self, data: dict[str, dict[str, str | int]], output_file: str):
         pass
 
 
 class JSONReportWriter(ReportWriter):
     @override
-    def write(
-        self, data: defaultdict[str, list[dict[str, str]]], output_file: str
-    ) -> None:
-        with open(output_file, "w", encoding="utf-8") as f:
+    def write(self, data: dict[str, dict[str, str | int]], output_file: str) -> None:
+        with open(f"{output_file}.json", "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
 
 
@@ -26,8 +23,8 @@ class WriterFactory(object):
         # "txt": TxtReportWriter,
     }
 
-    @staticmethod
-    def get_writer(extension_type: str = "json") -> ReportWriter:
+    @classmethod
+    def get_writer(cls, extension_type: str = "json") -> ReportWriter:
         writer_class = WriterFactory.writers.get(extension_type.lower())
         if not writer_class:
             raise ValueError(f"Неподдерживаемый формат: {extension_type=}")
