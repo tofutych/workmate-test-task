@@ -5,9 +5,8 @@
 ## 📦 Возможности
 
 - Обработка **нескольких CSV-файлов** за один запуск
-- Поддержка различных типов отчётов (например, `payout`)
 - Группировка данных по отделам
-- Вывод в формате JSON
+- Вывод в формате JSON, с возможностью легко добавить иной способ
 - CLI-интерфейс
 
 ## 🚀 Использование
@@ -19,3 +18,9 @@
 git clone https://github.com/tofutych/workmate-test-task.git
 cd workmate-test-task
 python3 main.py data1.csv data2.csv data3.csv --report payout
+```
+
+## 📸 Скриншот
+
+### Содержимое файла payout.json после выполнения программы
+![payout.json](images/payout.json.png)
