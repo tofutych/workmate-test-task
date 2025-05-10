@@ -12,7 +12,7 @@ class ReportWriter(ABC):
 class JSONReportWriter(ReportWriter):
     @override
     def write(self, data: dict[str, dict[str, str | int]], output_file: str) -> None:
-        with open(f"{output_file}.json", "w", encoding="utf-8") as f:
+        with open(f"{output_file}", "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
 
 
