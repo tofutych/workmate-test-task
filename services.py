@@ -44,4 +44,4 @@ def execute_from_command_line():
     report_data = builder.build_report(data=data)
     serialized_report_data = serialize_report(report_data)
     writer = WriterFactory.get_writer(extension_type="json")
-    writer.write(serialized_report_data, report_type)
+    writer.write(serialized_report_data, f"{report_type}.json")

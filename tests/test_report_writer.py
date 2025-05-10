@@ -38,7 +38,7 @@ def test_writer_factory_get_writer_invalid_type():
 
 
 @patch("builtins.open", new_callable=mock_open)
-def test_json_report_writer_writes_correct(mock_file_open):
+def test_json_report_writer_writes_correct_json_content(mock_file_open):
     writer = JSONReportWriter()
     output_filename = "payout.json"
 
@@ -49,5 +49,4 @@ def test_json_report_writer_writes_correct(mock_file_open):
     written_calls = mock_file_open().write.call_args_list
     written_content_actual = "".join(call.args[0] for call in written_calls)
 
-    assert json.loads(written_content_actual) == SAMPLE_REPORT_DATA
     assert json.loads(written_content_actual) == SAMPLE_REPORT_DATA

@@ -49,5 +49,5 @@ def test_execute_from_command_line(
     mock_serialize_report.assert_called_once_with(MOCK_BUILT_REPORT)
 
     mock_writer_instance.write.assert_called_once_with(
-        MOCK_SERIALIZED_DATA, MOCK_PARSED_ARGS["report"]
+        MOCK_SERIALIZED_DATA, f"{MOCK_PARSED_ARGS['report']}.json"
     )
