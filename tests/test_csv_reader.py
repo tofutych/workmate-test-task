@@ -4,18 +4,21 @@ import pytest
 
 from reporting import CsvReader
 
-MOCK_FILE_CONTENT = """id,email,name,department,hours_worked,hourly_rate
+MOCK_CSV_FILE_CONTENT = """id,email,name,department,hours_worked,hourly_rate
 1,alice@example.com,Alice Johnson,Marketing,160,50
 2,bob@example.com,Bob Smith,Design,150,40
 """
+MOCK_CSV_FILE_PATH = "./res/mock.csv"
 
 
-@patch("builtins.open", new_callable=mock_open, read_data=MOCK_FILE_CONTENT)
+@patch("builtins.open", new_callable=mock_open, read_data=MOCK_CSV_FILE_CONTENT)
 def test_csv_reader(mock_file):
     reader = CsvReader("mock.csv")
+
     with reader:
         rows = reader.read()
-    assert reader.get_header() == [
+
+    expected_header = [
         "id",
         "email",
         "name",
@@ -23,7 +26,9 @@ def test_csv_reader(mock_file):
         "hours",
         "rate",
     ]
-    assert rows == [
+    assert reader.get_header() == expected_header
+
+    expected_rows = [
         {
             "id": "1",
             "email": "alice@example.com",
@@ -41,18 +46,19 @@ def test_csv_reader(mock_file):
             "rate": "40",
         },
     ]
-    mock_file.assert_called_once_with("./res/mock.csv", "r", encoding="utf-8")
+    assert rows == expected_rows
+    mock_file.assert_called_once_with(MOCK_CSV_FILE_PATH, "r", encoding="utf-8")
 
 
 def test_csv_reader_file_not_found():
-    with pytest.raises(FileNotFoundError, match="delete_me.csv не найден!"):
-        with CsvReader("delete_me.csv") as reader:
+    non_existent_file = "non_existent_file.csv"
+    with pytest.raises(FileNotFoundError, match=f"{non_existent_file} не найден!"):
+        with CsvReader(non_existent_file) as reader:
             reader.read()
 
 
-def test_read_without_context_manager_raises():
+def test_csv_reader_outside_context_manager():
     reader = CsvReader("data1.csv")
-
     with pytest.raises(RuntimeError, match="Файл не открыт"):
         reader.read()
 
@@ -60,6 +66,15 @@ def test_read_without_context_manager_raises():
 @patch("builtins.open", new_callable=mock_open, read_data="")
 def test_csv_reader_empty_file(mock_file):
     with CsvReader("empty.csv") as reader:
-        result = reader.read()
-        assert result == []
+        rows = reader.read()
+        assert rows == []
         assert reader.get_header() == []
+
+
+@patch("builtins.open", new_callable=mock_open, read_data="id,name")
+def test_csv_reader_with_only_header(mock_file_open):
+    with CsvReader("header_only.csv") as reader:
+        rows = reader.read()
+
+    assert rows == []
+    assert reader.get_header() == ["id", "name"]
