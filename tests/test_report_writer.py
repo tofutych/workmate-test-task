@@ -5,49 +5,49 @@ import pytest
 
 from reporting.report_writer import JSONReportWriter, WriterFactory
 
+SAMPLE_REPORT_DATA = {
+    "Marketing": {
+        "employees": [
+            {
+                "name": "Alice Johnson",
+                "hours": "160",
+                "rate": "50",
+                "payout": "8000",
+            },
+            {
+                "name": "Henry Martin",
+                "hours": "150",
+                "rate": "35",
+                "payout": "5250",
+            },
+        ],
+        "department_total_payout": 13250,
+        "department_total_hours": 310,
+    }
+}
 
-def test_get_writer_valid():
+
+def test_writer_factory_get_writer_returns_json_writer():
     writer = WriterFactory.get_writer("json")
     assert isinstance(writer, JSONReportWriter)
 
 
-def test_get_writer_invalid():
+def test_writer_factory_get_writer_invalid_type():
     with pytest.raises(ValueError, match="Неподдерживаемый формат"):
-        WriterFactory.get_writer("txt")
+        WriterFactory.get_writer("unknown")
 
 
 @patch("builtins.open", new_callable=mock_open)
-def test_write_json_report(mock_file):
-    data = {
-        "Marketing": {
-            "employees": [
-                {
-                    "name": "Alice Johnson",
-                    "hours": "160",
-                    "rate": "50",
-                    "payout": "8000",
-                },
-                {
-                    "name": "Henry Martin",
-                    "hours": "150",
-                    "rate": "35",
-                    "payout": "5250",
-                },
-            ],
-            "department_total_payout": 13250,
-            "department_total_hours": 310,
-        }
-    }
-
+def test_json_report_writer_writes_correct(mock_file_open):
     writer = JSONReportWriter()
-    writer.write(data, "payout")
+    output_filename = "payout.json"
 
-    handle = mock_file()
-    written_data = "".join(call.args[0] for call in handle.write.call_args_list)
+    writer.write(SAMPLE_REPORT_DATA, output_filename)
 
-    expected_data = json.dumps(data, indent=2)
+    mock_file_open.assert_called_once_with(output_filename, "w", encoding="utf-8")
 
-    written_data = written_data.strip()
-    expected_data = expected_data.strip()
+    written_calls = mock_file_open().write.call_args_list
+    written_content_actual = "".join(call.args[0] for call in written_calls)
 
-    assert written_data == expected_data
+    assert json.loads(written_content_actual) == SAMPLE_REPORT_DATA
+    assert json.loads(written_content_actual) == SAMPLE_REPORT_DATA
