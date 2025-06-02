@@ -10,5 +10,7 @@ dependencies = [
     "ruff>=0.11.9",
 ]
 
-[tool.ruff]
-line-length = 88
+[tool.pytest.ini_options]
+addopts = "--cov=services --cov=reporting --cov-report=term-missing"
+testpaths = ["tests"]
+
